@@ -34,6 +34,12 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* Background GIF */
+        body {
+            background: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGZndmk1emE3Z2k1ZGU2aGloZDRvdWQ5cjc2a3gzc283emN3eGk5eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/r8GMmlV8qGrfZ3txfX/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
         /* Sidebar styles */
         .sidebar {
             background: var(--sidebar-bg);
@@ -47,12 +53,17 @@
             color: var(--sidebar-text);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .sidebar-link:hover {
             background: var(--sidebar-hover);
             color: var(--sidebar-text-active);
             transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .sidebar-link.active {
@@ -73,8 +84,8 @@
         }
 
         .sidebar-icon {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -82,35 +93,11 @@
         }
 
         .sidebar-link:hover .sidebar-icon {
-            transform: scale(1.1);
+            transform: scale(1.2);
         }
 
         .sidebar-link.active .sidebar-icon {
             color: #818cf8;
-        }
-
-        /* User dropdown */
-        .user-dropdown {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            background: rgba(23, 23, 23, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Loading animations */
-        @keyframes loading {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        .loading-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 2px;
-            background: linear-gradient(to right, #4f46e5, #818cf8);
-            animation: loading 0.5s ease-in-out;
-            z-index: 1000;
         }
 
         /* Scrollbar */
@@ -175,16 +162,15 @@
                     <div class="space-y-1">
                         <div class="px-3 pt-4 pb-1 text-xs text-gray-400 uppercase tracking-wider font-mono">Dashboard</div>
                         
-                        <a href="../instances" class="sidebar-link flex items-center gap-3 px-3 py-2.5 text-sm"
+                        <a href="../instances" class="sidebar-link flex items-center gap-3"
                            :class="{'active': currentPath.includes('/instances')}">
                             <div class="sidebar-icon">
                                 <i class="fas fa-server"></i>
                             </div>
                             <span>Servers</span>
-                            <span class="ml-auto bg-indigo-500/10 text-indigo-400 text-xs px-2 py-0.5 rounded-full"></span>
                         </a>
                         
-                        <a href="../account" class="sidebar-link flex items-center gap-3 px-3 py-2.5 text-sm"
+                        <a href="../account" class="sidebar-link flex items-center gap-3"
                            :class="{'active': currentPath.includes('/account')}">
                             <div class="sidebar-icon">
                                 <i class="fas fa-user-cog"></i>
@@ -193,7 +179,7 @@
                         </a>
                         
                         <% if (req.user.admin === true) { %>
-                        <a href="/admin/overview" class="sidebar-link flex items-center gap-3 px-3 py-2.5 text-sm"
+                        <a href="/admin/overview" class="sidebar-link flex items-center gap-3"
                            :class="{'active': currentPath.includes('/admin')}">
                             <div class="sidebar-icon">
                                 <i class="fas fa-shield-alt"></i>
@@ -202,15 +188,16 @@
                             <span class="ml-auto bg-red-500/10 text-red-400 text-xs px-2 py-0.5 rounded-full">PRO</span>
                         </a>
                         <% } %>
-                        
+
                         <div class="px-3 pt-4 pb-1 text-xs text-gray-400 uppercase tracking-wider font-mono">Tools</div>
-                      
+                    </div>
+                </nav>
 
                 <!-- Sidebar footer -->
                 <div class="p-4 border-t border-white/5">
                     <div class="flex items-center justify-between text-gray-400 text-xs">
                         <span>v1.0.0</span>
-                        <span>© DRACO</span>
+                        <span>© GFX NODES</span>
                     </div>
                 </div>
             </div>
@@ -240,4 +227,5 @@
         });
     </script>
 </body>
+
 </html>
