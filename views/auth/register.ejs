@@ -18,9 +18,9 @@
       --error: #ef4444;
       --success: #10b981;
     }
-    
+
     body {
-      background: var(--background);
+      background: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm80YTl0M2VxZW54cDZyamNlMjdvNWVoNXpxZnFtamtmOTZ0Z200MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2PWBLDJ2KtB1X6o9vY/giphy.gif') center/cover no-repeat;
       color: var(--text-primary);
       font-family: 'Satoshi', sans-serif;
       min-height: 100vh;
@@ -49,24 +49,24 @@
       animation: rotate 15s linear infinite;
       z-index: 0;
     }
-    
+
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    
+
     .form-content {
       position: relative;
       z-index: 1;
     }
-    
+
     .title {
       font-family: 'Clash Display', sans-serif;
       font-weight: 600;
       color: var(--text-primary);
       letter-spacing: -0.025em;
     }
-    
+
     .input-field {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid #334155;
@@ -79,18 +79,18 @@
       width: 100%;
       box-sizing: border-box;
     }
-    
+
     .input-field:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
       outline: none;
     }
-    
+
     .input-field::placeholder {
       color: var(--text-secondary);
       opacity: 0.7;
     }
-    
+
     .submit-btn {
       background: var(--primary);
       transition: all 0.2s ease;
@@ -104,29 +104,29 @@
       cursor: pointer;
       color: white;
     }
-    
+
     .submit-btn:hover {
       background: var(--primary-hover);
       transform: translateY(-1px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
-    
+
     .submit-btn:active {
       transform: translateY(0);
     }
-    
+
     .submit-btn:disabled {
       background: #64748b;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-    
+
     .form-group {
       position: relative;
       margin-bottom: 1.25rem;
     }
-    
+
     .label {
       display: block;
       margin-bottom: 0.5rem;
@@ -134,7 +134,7 @@
       font-weight: 500;
       color: var(--text-primary);
     }
-    
+
     .password-toggle {
       position: absolute;
       right: 1rem;
@@ -149,34 +149,34 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .password-toggle:hover {
       color: var(--primary);
     }
-    
+
     .link {
       color: var(--primary);
       font-weight: 500;
       transition: color 0.2s ease;
       text-decoration: none;
     }
-    
+
     .link:hover {
       color: var(--primary-hover);
       text-decoration: underline;
     }
-    
+
     .error-message {
       color: var(--error);
       font-size: 0.8125rem;
       margin-top: 0.25rem;
       display: none;
     }
-    
+
     .input-field.error {
       border-color: var(--error);
     }
-    
+
     .success-message {
       color: var(--success);
       font-size: 0.875rem;
@@ -184,7 +184,7 @@
       text-align: center;
       display: none;
     }
-    
+
     @media (max-width: 640px) {
       .form-container {
         padding: 1.5rem;
@@ -193,22 +193,22 @@
         margin: 0;
         max-width: 100%;
       }
-      
+
       body {
         padding: 0;
       }
     }
-    
+
     /* Animation classes */
     .animate-fade-in {
       animation: fadeIn 0.5s ease-out forwards;
     }
-    
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     /* Loading spinner */
     .spinner {
       display: inline-block;
@@ -220,7 +220,7 @@
       animation: spin 1s ease-in-out infinite;
       margin-right: 0.5rem;
     }
-    
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -372,18 +372,11 @@
             
             // Show success message
             document.getElementById('success-message').style.display = 'block';
-            document.getElementById('success-message').textContent = 'Registration successful! Redirecting...';
-            
-            // Reset form
-            form.reset();
-            
-            // Redirect after delay (in a real app, this would happen after server response)
-            setTimeout(() => {
-              window.location.href = '/dashboard';
-            }, 2000);
+            document.getElementById('success-message').textContent = 'Registration successful!';
           } catch (error) {
-            showError(null, 'success-message', 'Registration failed. Please try again.');
+            console.error(error);
           } finally {
+            // Re-enable submit button and hide spinner
             submitBtn.disabled = false;
             submitText.textContent = 'Register';
             submitSpinner.style.display = 'none';
@@ -392,44 +385,15 @@
       }
       
       function validateField(input) {
-        const errorId = `${input.id}-error`;
-        const errorElement = document.getElementById(errorId);
-        
-        // Clear previous error
-        input.classList.remove('error');
-        errorElement.style.display = 'none';
-        errorElement.textContent = '';
-        
-        // Validate based on input type
-        if (input.required && !input.value.trim()) {
-          showError(input, errorId, 'This field is required');
+        const errorMessage = input.nextElementSibling;
+        if (!input.value) {
+          errorMessage.textContent = `${input.name} is required`;
+          input.classList.add('error');
           return false;
-        }
-        
-        if (input.id === 'username' && input.value.length < 3) {
-          showError(input, errorId, 'Username must be at least 3 characters');
-          return false;
-        }
-        
-        if (input.id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
-          showError(input, errorId, 'Please enter a valid email address');
-          return false;
-        }
-        
-        if (input.id === 'password' && input.value.length < 8) {
-          showError(input, errorId, 'Password must be at least 8 characters');
-          return false;
-        }
-        
-        return true;
-      }
-      
-      function showError(input, errorId, message) {
-        if (input) input.classList.add('error');
-        const errorElement = document.getElementById(errorId);
-        if (errorElement) {
-          errorElement.textContent = message;
-          errorElement.style.display = 'block';
+        } else {
+          errorMessage.textContent = '';
+          input.classList.remove('error');
+          return true;
         }
       }
     });
