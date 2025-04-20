@@ -1,4 +1,4 @@
-# DracoPanel  
+# GFX NODES
 
 **DracoPanel** is an open-source, modern game server and application management panel built with **Node.js, Docker, and Express**. It is designed to work seamlessly with the **DracoDaemon** backend.  
 
