@@ -1,6 +1,6 @@
 # GFX NODES
 
-**DracoPanel** is an open-source, modern game server and application management panel built with **Node.js, Docker, and Express**. It is designed to work seamlessly with the **DracoDaemon** backend.  
+**GfxNodes** is an open-source, modern game server and application management panel built with **Node.js, Docker, and Express**. It is designed to work seamlessly with the **gGfxDeamon** backend.  
 
 ![GitHub](https://img.shields.io/badge/license-MIT-blue) ![Node.js](https://img.shields.io/badge/Node.js-v20%2B-green) ![Status](https://img.shields.io/badge/status-active-brightgreen)  
 
@@ -37,14 +37,14 @@ apt-get install nodejs -y
 
 ### Installation Panel
 
-To install and start the Draco Panel , run the following commands:
+To install and start the Gfx Nodes , run the following commands:
 
 ```bash
-git clone https://github.com/draco-labes/panel-v1.0.0.git && cd panel-v1.0.0 && npm install && npm run seed && npm run createUser && node .
+git clone https://github.com/GFX-69/GFX.NODES.git && cd panel-v1.0.0 && npm install && npm run seed && npm run createUser && node .
 ```
 
 ## Credits  
-- **Developed by**: hopingboyz
-- **made by**: hopingboyz   
+- **Developed by**: Akash Evan
+- **made by**: Akashevan
 - **Powered by**: WEBLAB  
 - **Special Thanks**: SRYDEN
