@@ -4,173 +4,138 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/attach/attach.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/fit/fit.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
 <style>
-    /* Responsive Glassmorphism Theme */
+    /* Modern Dark Theme */
     :root {
         --primary: #6777ef;
-        --primary-hover: #5166ea;
         --success: #47c363;
         --danger: #fc544b;
         --warning: #ffa426;
-        --info: #3abaf4;
         --bg-color: #0f172a;
         --card-bg: rgba(30, 41, 59, 0.8);
-        --card-border: rgba(255, 255, 255, 0.1);
     }
 
-    /* Responsive Glass Buttons */
-    .glass-btn {
-        display: inline-flex;
+    /* Beautiful Stats Cards */
+    .stat-card {
+        background: var(--card-bg);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.8rem 1.2rem;
-        border-radius: 0.75rem;
-        font-weight: 500;
+        border-radius: 8px;
+        margin-right: 12px;
+    }
+
+    .cpu-icon { background: rgba(58, 186, 244, 0.2); }
+    .ram-icon { background: rgba(71, 195, 99, 0.2); }
+    .disk-icon { background: rgba(255, 164, 38, 0.2); }
+
+    .stat-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .cpu-icon svg { color: #3abaf4; }
+    .ram-icon svg { color: #47c363; }
+    .disk-icon svg { color: #ffa426; }
+
+    .stat-title {
         font-size: 0.9rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: none;
-        position: relative;
-        overflow: hidden;
-        backdrop-filter: blur(10px);
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: white;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin: 0.25rem;
+        color: rgba(255, 255, 255, 0.7);
     }
 
-    .glass-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .glass-btn svg {
-        margin-right: 0.5rem;
-        width: 1.1rem;
-        height: 1.1rem;
-    }
-
-    /* Button Variants */
-    .btn-start {
-        background: rgba(71, 195, 99, 0.15);
-        border-color: rgba(71, 195, 99, 0.25);
-    }
-
-    .btn-restart {
-        background: rgba(255, 164, 38, 0.15);
-        border-color: rgba(255, 164, 38, 0.25);
-    }
-
-    .btn-stop {
-        background: rgba(252, 84, 75, 0.15);
-        border-color: rgba(252, 84, 75, 0.25);
-    }
-
-    .btn-plugins {
-        background: rgba(58, 186, 244, 0.15);
-        border-color: rgba(58, 186, 244, 0.25);
-    }
-
-    .btn-send {
-        background: rgba(103, 119, 239, 0.25);
-        border-color: rgba(103, 119, 239, 0.35);
-    }
-
-    /* Responsive Console */
-    .console-wrapper {
-        background: rgba(15, 23, 42, 0.7);
-        border-radius: 0.75rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-    }
-
-    .console-header {
-        padding: 1rem;
-        background: rgba(15, 23, 42, 0.8);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .console-title {
+    .stat-value {
+        font-size: 1.4rem;
         font-weight: 600;
         color: white;
-        margin-bottom: 0.5rem;
     }
 
-    .console-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+    .progress-container {
+        margin-top: 15px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
     }
 
-    #terminal {
-        padding: 1rem;
-        min-height: 300px;
+    .progress-bar {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.5s ease;
+    }
+
+    .cpu-progress { background: linear-gradient(90deg, #3abaf4, #6777ef); }
+    .ram-progress { background: linear-gradient(90deg, #47c363, #8fd460); }
+    .disk-progress { background: linear-gradient(90deg, #ffa426, #ffcf24); }
+
+    /* Console Styles */
+    .terminal-container {
         background: #0a0a1a;
+        padding: 20px;
+        border-radius: 0 0 10px 10px;
+        min-height: 400px;
     }
 
-    /* Responsive Input */
     .console-input-container {
         display: flex;
-        gap: 0.75rem;
-        padding: 1rem;
-        background: rgba(15, 23, 42, 0.8);
+        gap: 10px;
+        padding: 15px;
+        background: rgba(15, 23, 42, 0.7);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     #console-input {
         flex-grow: 1;
-        padding: 0.75rem 1rem;
+        padding: 10px 15px;
         background: rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
+        border-radius: 6px;
         color: white;
-        font-family: 'Fira Code', monospace;
     }
 
-    /* Responsive Stats */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
+    #send-command {
+        padding: 10px 20px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
-    .stat-card {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 0.75rem;
-        padding: 1.25rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Power Buttons */
+    .power-btn {
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 8px;
     }
 
-    /* Mobile Optimizations */
-    @media (max-width: 640px) {
-        .glass-btn {
-            padding: 0.7rem 1rem;
-            font-size: 0.8rem;
-        }
-        
-        .console-actions {
-            justify-content: center;
-        }
-        
-        #terminal {
-            min-height: 250px;
-            padding: 0.75rem;
-            font-size: 0.9rem;
-        }
-        
-        .console-input-container {
-            flex-direction: column;
-        }
-        
-        #send-command {
-            width: 100%;
-        }
+    .power-btn svg {
+        margin-right: 6px;
+        width: 16px;
+        height: 16px;
     }
+
+    .btn-start { background: var(--success); }
+    .btn-restart { background: var(--warning); color: #000; }
+    .btn-stop { background: var(--danger); }
 </style>
 
 <!-- Main Content -->
@@ -179,65 +144,30 @@
     
     <div id="alert-container" class="mb-6"></div>
     
-    <!-- Console Section -->
-    <div class="console-wrapper">
-        <div class="console-header">
-            <h3 class="console-title">Server Console</h3>
-            <div class="console-actions">
-                <button id="startButton" class="glass-btn btn-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Start
-                </button>
-                <button id="restartButton" class="glass-btn btn-restart">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    Restart
-                </button>
-                <button id="stopButton" class="glass-btn btn-stop">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                    </svg>
-                    Stop
-                </button>
-                <button onclick="window.location.href='/instance/<%= req.params.id %>/plugins'" class="glass-btn btn-plugins">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Plugins
-                </button>
-            </div>
-        </div>
-        
-        <div id="terminal"></div>
-        
-        <div class="console-input-container">
-            <input type="text" id="console-input" placeholder="Enter command...">
-            <button id="send-command" class="glass-btn btn-send">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                Send
-            </button>
-        </div>
-    </div>
-    
     <!-- Stats Section -->
-    <div class="stats-grid">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <!-- CPU Card -->
         <div class="stat-card">
-            <div class="stat-title">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                </svg>
-                CPU Usage
+            <div class="stat-header">
+                <div class="stat-icon cpu-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                        <line x1="20" y1="9" x2="23" y2="9"></line>
+                        <line x1="20" y1="14" x2="23" y2="14"></line>
+                        <line x1="1" y1="9" x2="4" y2="9"></line>
+                        <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-title">CPU Usage</div>
+                    <div class="stat-value" id="cpuUsage">0%</div>
+                </div>
             </div>
-            <div class="stat-value" id="cpuUsage">0%</div>
             <div class="progress-container">
                 <div class="progress-bar cpu-progress" id="cpuProgressBar" style="width: 0%"></div>
             </div>
@@ -245,13 +175,18 @@
         
         <!-- RAM Card -->
         <div class="stat-card">
-            <div class="stat-title">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                </svg>
-                Memory Usage
+            <div class="stat-header">
+                <div class="stat-icon ram-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-title">Memory Usage</div>
+                    <div class="stat-value" id="ramUsage">0 MB / 0 MB</div>
+                </div>
             </div>
-            <div class="stat-value" id="ramUsage">0 MB / 0 MB</div>
             <div class="progress-container">
                 <div class="progress-bar ram-progress" id="ramProgressBar" style="width: 0%"></div>
             </div>
@@ -259,23 +194,192 @@
         
         <!-- Disk Card -->
         <div class="stat-card">
-            <div class="stat-title">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                Disk Usage
+            <div class="stat-header">
+                <div class="stat-icon disk-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+                        <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-title">Disk Usage</div>
+                    <div class="stat-value" id="diskUsage">0 MB / 0 MB</div>
+                </div>
             </div>
-            <div class="stat-value" id="diskUsage">0 MB / 0 MB</div>
             <div class="progress-container">
                 <div class="progress-bar disk-progress" id="diskProgressBar" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Console Section -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Server Console</h3>
+            <div>
+                <button id="startButton" class="power-btn btn-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Start
+                </button>
+                <button id="restartButton" class="power-btn btn-restart">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"/>
+                    </svg>
+                    Restart
+                </button>
+                <button id="stopButton" class="power-btn btn-stop">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="4" width="12" height="16" rx="2"></rect>
+                    </svg>
+                    Stop
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="terminal" class="terminal-container"></div>
+            <div class="console-input-container">
+                <input type="text" id="console-input" placeholder="Enter command...">
+                <button id="send-command">Send</button>
             </div>
         </div>
     </div>
 </main>
 
 <script>
-    // Your existing JavaScript remains exactly the same
-    // All functionality is preserved
+    // Initialize terminal
+    const term = new Terminal({
+        cursorBlink: true,
+        fontFamily: "'Fira Code', monospace",
+        fontSize: 14,
+        theme: {
+            background: '#0a0a1a',
+            foreground: '#ffffff'
+        }
+    });
+    
+    // Load fit addon for proper terminal sizing
+    const fitAddon = new FitAddon();
+    term.loadAddon(fitAddon);
+    term.open(document.getElementById('terminal'));
+    fitAddon.fit();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        fitAddon.fit();
+    });
+    
+    // WebSocket connection for console
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(`${protocol}://${window.location.host}/console/<%= instance.id %>`);
+    
+    socket.onmessage = function(event) {
+        term.write(event.data);
+    };
+    
+    socket.onclose = function() {
+        term.write('\r\n\nConnection closed. Attempting to reconnect...');
+        setTimeout(() => window.location.reload(), 2000);
+    };
+    
+    // Handle command sending
+    document.getElementById('send-command').addEventListener('click', sendCommand);
+    document.getElementById('console-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendCommand();
+    });
+    
+    function sendCommand() {
+        const command = document.getElementById('console-input').value;
+        if (command.trim()) {
+            socket.send(command);
+            document.getElementById('console-input').value = '';
+        }
+    }
+    
+    // Stats updates
+    function updateStats() {
+        fetch(`/api/instance/<%= instance.id %>/stats`)
+            .then(response => response.json())
+            .then(data => {
+                // Update CPU
+                document.getElementById('cpuUsage').textContent = `${data.cpu}%`;
+                document.getElementById('cpuProgressBar').style.width = `${data.cpu}%`;
+                
+                // Update RAM
+                const ramUsage = formatBytes(data.memory.usage);
+                const ramTotal = formatBytes(data.memory.limit);
+                document.getElementById('ramUsage').textContent = `${ramUsage} / ${ramTotal}`;
+                document.getElementById('ramProgressBar').style.width = `${data.memory.percent}%`;
+                
+                // Update Disk
+                const diskUsage = formatBytes(data.disk.usage);
+                const diskTotal = formatBytes(data.disk.limit);
+                document.getElementById('diskUsage').textContent = `${diskUsage} / ${diskTotal}`;
+                document.getElementById('diskProgressBar').style.width = `${data.disk.percent}%`;
+            })
+            .catch(error => console.error('Error fetching stats:', error));
+    }
+    
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Update stats every 2 seconds
+    setInterval(updateStats, 2000);
+    updateStats(); // Initial call
+    
+    // Power actions
+    document.getElementById('startButton').addEventListener('click', () => {
+        fetch(`/api/instance/<%= instance.id %>/start`, { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error('Start failed');
+                showAlert('success', 'Server started successfully');
+            })
+            .catch(error => {
+                showAlert('danger', 'Failed to start server');
+                console.error('Start error:', error);
+            });
+    });
+    
+    document.getElementById('restartButton').addEventListener('click', () => {
+        fetch(`/api/instance/<%= instance.id %>/restart`, { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error('Restart failed');
+                showAlert('warning', 'Server restarting...');
+            })
+            .catch(error => {
+                showAlert('danger', 'Failed to restart server');
+                console.error('Restart error:', error);
+            });
+    });
+    
+    document.getElementById('stopButton').addEventListener('click', () => {
+        fetch(`/api/instance/<%= instance.id %>/stop`, { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error('Stop failed');
+                showAlert('info', 'Server stopped successfully');
+            })
+            .catch(error => {
+                showAlert('danger', 'Failed to stop server');
+                console.error('Stop error:', error);
+            });
+    });
+    
+    // Alert function
+    function showAlert(type, message) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        document.getElementById('alert-container').appendChild(alert);
+        setTimeout(() => alert.remove(), 5000);
+    }
 </script>
 
 <%- include('../components/footer') %>
