@@ -1,58 +1,57 @@
 <%- include('../components/template') %>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"
-    integrity="sha512-2PRgAav8Os8vLcOAh1gSaDoNLe1fAyq8/G3QSdyjFFD+OqNjLeHE/8q4+S4MEZgPsuo+itHopj+hJvqS8XUQ8A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"
-    integrity="sha512-iLYuqv+v/P4u9erpk+KM83Ioe/l7SEmr7wB6g+Kg1qmEit8EShDKnKtLHlv2QXUp7GGJhmqDI+1PhJYLTsfb8w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/attach/attach.min.js"
-    integrity="sha512-43J76SR5UijcuJTzs73z8NpkyWon8a8EoV+dX6obqXW7O26Yb268H2vP6EiJjD7sWXqxS3G/YOqPyyLF9fmqgA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/fit/fit.min.js"
-    integrity="sha512-+wh8VA1djpWk3Dj9/IJDu6Ufi4vVQ0zxLv9Vmfo70AbmYFJm0z3NLnV98vdRKBdPDV4Kwpi7EZdr8mDY9L8JIA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/attach/attach.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/fit/fit.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
 <style>
-    /* Pterodactyl-inspired base styles */
     :root {
-        --primary: #6777ef;
-        --primary-hover: #5166ea;
-        --secondary: #cdd3d8;
-        --success: #47c363;
-        --danger: #fc544b;
-        --warning: #ffa426;
-        --info: #3abaf4;
-        --dark: #191d21;
-        --light: #e3eaef;
-        --gray: #6c757d;
-        --gray-dark: #343a40;
-        --bg-color: #1a1a2e;
-        --sidebar-bg: #0f0f23;
-        --card-bg: #16213e;
-        --card-border: rgba(255, 255, 255, 0.05);
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --secondary: #94a3b8;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --info: #0ea5e9;
+        --dark: #1e293b;
+        --light: #f1f5f9;
+        --bg-color: #0f172a;
+        --sidebar-bg: #1e293b;
+        --card-bg: #1e293b;
+        --card-border: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
     }
     
     body {
         background-color: var(--bg-color);
-        color: #d8dee9;
-        font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.5;
     }
     
-    /* Cards */
+    /* Modern Card Design */
     .card {
         background-color: var(--card-bg);
         border: 1px solid var(--card-border);
-        border-radius: 6px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         margin-bottom: 1.5rem;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     
     .card-header {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.2);
         border-bottom: 1px solid var(--card-border);
-        padding: 1rem 1.5rem;
+        padding: 1.25rem 1.5rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -60,35 +59,36 @@
     
     .card-title {
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 1.125rem;
         margin: 0;
-        color: #fff;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
     
     .card-body {
         padding: 1.5rem;
     }
     
-    /* Buttons */
+    /* Sleek Buttons */
     .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 500;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 0.5rem 1rem;
+        padding: 0.625rem 1.25rem;
+        border-radius: 0.5rem;
         font-size: 0.875rem;
-        line-height: 1.5;
-        border-radius: 4px;
-        transition: all 0.2s ease-in-out;
+        line-height: 1.25rem;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+        gap: 0.5rem;
     }
     
     .btn-sm {
-        padding: 0.25rem 0.5rem;
+        padding: 0.375rem 0.75rem;
         font-size: 0.75rem;
     }
     
@@ -99,7 +99,6 @@
     
     .btn-primary:hover {
         background-color: var(--primary-hover);
-        color: white;
     }
     
     .btn-success {
@@ -117,33 +116,40 @@
         color: white;
     }
     
-    .btn-info {
-        background-color: var(--info);
-        color: white;
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--secondary);
+        color: var(--text-primary);
     }
     
-    /* Terminal */
+    .btn-outline:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Terminal Styling */
     .terminal-container {
-        background-color: #0a0a1a;
-        border-radius: 4px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        min-height: 400px;
+        background-color: #0f172a;
+        border-radius: 0.5rem;
+        border: 1px solid var(--card-border);
+        height: 400px;
         position: relative;
+        overflow: hidden;
     }
     
-    /* Stats */
+    /* Stats Cards */
     .stat-card {
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
+        background-color: rgba(15, 23, 42, 0.5);
+        border-radius: 0.5rem;
         padding: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        margin-bottom: 0.75rem;
+        border: 1px solid var(--card-border);
+        margin-bottom: 1rem;
     }
     
     .stat-title {
         font-size: 0.75rem;
         text-transform: uppercase;
-        color: var(--secondary);
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
         margin-bottom: 0.5rem;
         display: flex;
         align-items: center;
@@ -151,64 +157,81 @@
     }
     
     .stat-value {
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 600;
-        color: white;
+        color: var(--text-primary);
         margin-bottom: 0.25rem;
     }
     
     .progress {
-        height: 6px;
+        height: 0.5rem;
         background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-        margin-top: 0.5rem;
+        border-radius: 0.25rem;
+        margin-top: 0.75rem;
         overflow: hidden;
     }
     
     .progress-bar {
         height: 100%;
-        border-radius: 3px;
-        background: linear-gradient(90deg, var(--primary), #8a63f3);
+        border-radius: 0.25rem;
+        background: linear-gradient(90deg, var(--primary), #8b5cf6);
     }
     
-    /* Status indicators */
+    /* Status Badges */
     .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 0.25rem 0.75rem;
+        padding: 0.375rem 0.75rem;
         font-size: 0.75rem;
         font-weight: 600;
-        border-radius: 50px;
+        border-radius: 9999px;
+        gap: 0.375rem;
+    }
+    
+    .status-badge::before {
+        content: '';
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 9999px;
+        background-color: currentColor;
     }
     
     .status-online {
-        background-color: rgba(71, 195, 99, 0.1);
+        background-color: rgba(16, 185, 129, 0.1);
         color: var(--success);
     }
     
     .status-offline {
-        background-color: rgba(252, 84, 75, 0.1);
+        background-color: rgba(239, 68, 68, 0.1);
         color: var(--danger);
     }
     
     .status-starting {
-        background-color: rgba(255, 164, 38, 0.1);
+        background-color: rgba(245, 158, 11, 0.1);
         color: var(--warning);
         animation: pulse 2s infinite;
     }
     
-    /* Power buttons */
+    /* Power Controls */
+    .power-controls {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
     .power-btn {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 1rem;
-        border-radius: 4px;
-        background-color: rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        transition: all 0.2s ease;
+        border-radius: 0.5rem;
+        background-color: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--card-border);
+        transition: all 0.2s;
         cursor: pointer;
+        text-align: center;
     }
     
     .power-btn:hover {
@@ -217,125 +240,17 @@
     }
     
     .power-btn svg {
-        width: 24px;
-        height: 24px;
+        width: 1.5rem;
+        height: 1.5rem;
         margin-bottom: 0.5rem;
     }
     
     .power-btn span {
         font-size: 0.75rem;
-        color: var(--secondary);
+        color: var(--text-secondary);
     }
     
-    /* Animations */
-    @keyframes pulse {
-        0% { opacity: 0.6; }
-        50% { opacity: 1; }
-        100% { opacity: 0.6; }
-    }
-    
-    /* Layout */
-    .grid-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    @media (min-width: 1024px) {
-        .grid-layout {
-            grid-template-columns: 2fr 1fr;
-        }
-    }
-    
-    /* Alerts */
-    .alert {
-        padding: 0.75rem 1.25rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: flex-start;
-    }
-    
-    .alert-success {
-        background-color: rgba(71, 195, 99, 0.1);
-        border-left: 4px solid var(--success);
-        color: #b8f1c6;
-    }
-    
-    .alert-danger {
-        background-color: rgba(252, 84, 75, 0.1);
-        border-left: 4px solid var(--danger);
-        color: #ffb8b5;
-    }
-    
-    .alert-icon {
-        margin-right: 0.75rem;
-        font-size: 1.25rem;
-    }
-    
-    /* Inputs */
-    .form-input {
-        background-color: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
-        color: white;
-        width: 100%;
-        transition: all 0.2s ease;
-    }
-    
-    .form-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(103, 119, 239, 0.2);
-    }
-    
-    /* Utility classes */
-    .text-muted {
-        color: var(--secondary) !important;
-    }
-    
-    .text-primary {
-        color: var(--primary) !important;
-    }
-    
-    .text-success {
-        color: var(--success) !important;
-    }
-    
-    .text-danger {
-        color: var(--danger) !important;
-    }
-    
-    .text-warning {
-        color: var(--warning) !important;
-    }
-    
-    .text-info {
-        color: var(--info) !important;
-    }
-    
-    .bg-primary {
-        background-color: var(--primary) !important;
-    }
-    
-    .bg-success {
-        background-color: var(--success) !important;
-    }
-    
-    .bg-danger {
-        background-color: var(--danger) !important;
-    }
-    
-    .bg-warning {
-        background-color: var(--warning) !important;
-    }
-    
-    .bg-info {
-        background-color: var(--info) !important;
-    }
-    
-    /* Server details */
+    /* Server Details */
     .server-details {
         margin-bottom: 1.5rem;
     }
@@ -344,9 +259,9 @@
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
-        color: var(--secondary);
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
         margin-bottom: 1rem;
-        letter-spacing: 0.5px;
     }
     
     .server-detail {
@@ -361,55 +276,140 @@
         color: var(--primary);
     }
     
-    /* Stats container */
-    .stats-container {
-        margin-top: 1.5rem;
+    /* Layout */
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    @media (min-width: 1024px) {
+        .grid-layout {
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        }
+    }
+    
+    /* Console Input */
+    .console-input-container {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    
+    .console-input {
+        flex: 1;
+        background-color: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--card-border);
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        color: var(--text-primary);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.875rem;
+    }
+    
+    .console-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+    }
+    
+    /* Utility Classes */
+    .text-muted {
+        color: var(--text-secondary) !important;
+    }
+    
+    .text-primary {
+        color: var(--primary) !important;
+    }
+    
+    .flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .gap-2 {
+        gap: 0.5rem;
+    }
+    
+    .mt-4 {
+        margin-top: 1rem;
+    }
+    
+    .mb-4 {
+        margin-bottom: 1rem;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 4px;
     }
 </style>
 
 <script>
+    // Your existing JavaScript code remains the same
+    // Only the UI/theme has been updated
     function showAlert(type, title, message) {
         const alertContainer = document.getElementById('alert-container');
         const alertElement = document.createElement('div');
         alertElement.className = `alert alert-${type}`;
         alertElement.innerHTML = `
-            <div class="alert-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-            </div>
-            <div>
-                <h4 class="font-semibold">${title}</h4>
-                <p class="text-sm mt-1">${message}</p>
+            <div class="flex items-start gap-3">
+                <div class="alert-icon flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-sm">${title}</h4>
+                    <p class="text-sm text-muted mt-1">${message}</p>
+                </div>
             </div>
         `;
         alertContainer.appendChild(alertElement);
         setTimeout(() => {
-            alertElement.classList.add('opacity-0');
+            alertElement.classList.add('opacity-0', 'transition-opacity', 'duration-300');
             setTimeout(() => alertContainer.removeChild(alertElement), 300);
         }, 5000);
     }
     
     const eulaPopupHTML = `
         <div id="eula-popup" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
-                <div class="flex items-center mb-4">
-                    <div class="bg-blue-500/10 p-2 rounded-lg mr-3">
+            <div class="bg-slate-800 p-6 rounded-lg shadow-xl max-w-md w-full border border-slate-700">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-blue-500/10 p-2 rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                     </div>
                     <h2 class="text-xl font-bold text-white">Minecraft EULA</h2>
                 </div>
-                <p class="text-gray-300 mb-6 text-sm">By continuing, you agree to the Minecraft End User License Agreement (EULA). You must accept the EULA to run this server.</p>
-                <div class="flex justify-end space-x-3">
-                    <button id="decline-eula" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors duration-200">
+                <p class="text-slate-300 mb-6 text-sm">By continuing, you agree to the Minecraft End User License Agreement (EULA). You must accept the EULA to run this server.</p>
+                <div class="flex justify-end gap-3">
+                    <button id="decline-eula" class="btn btn-outline">
                         Decline
                     </button>
-                    <button id="accept-eula" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors duration-200 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <button id="accept-eula" class="btn btn-primary flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
                         Accept
@@ -455,7 +455,7 @@
     }
 </script>
 
-<main class="container mx-auto px-4 py-6">
+<main class="container mx-auto px-4 py-8">
     <%- include('../components/instance') %>
     <% if (Array.isArray(files) && files.length > 0 && !files.some(file => file.name === 'eula.txt')) { %>
         <% if (instance.imageData.features && instance.imageData.features.includes('eula')) { %>
@@ -468,22 +468,24 @@
     <% } %>
     
     <% if (instance.Image == "ghcr.io/hydrenoffical/hydravm:latest") { %>
-        <div id="alert-container" class="mb-4">
+        <div id="alert-container" class="mb-6">
             <div class="alert alert-info">
-                <div class="alert-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-semibold">Ubuntu 22.04 VM</h4>
-                    <p class="text-sm mt-1">You're running an Ubuntu 22.04 VM. Default credentials: <code class="bg-black/20 px-1.5 py-0.5 rounded">root:root</code></p>
+                <div class="flex items-start gap-3">
+                    <div class="alert-icon flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-sm">Ubuntu 22.04 VM</h4>
+                        <p class="text-sm text-muted mt-1">You're running an Ubuntu 22.04 VM. Default credentials: <code class="bg-black/20 px-1.5 py-0.5 rounded font-mono">root:root</code></p>
+                    </div>
                 </div>
             </div>
         </div>
     <% } else { %>
-        <div id="alert-container" class="mb-4"></div>
+        <div id="alert-container" class="mb-6"></div>
     <% } %>
     
     <div class="grid-layout gap-6">
@@ -492,32 +494,31 @@
             <!-- Console Card -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Server Console</h3>
-                    <button onclick="clearTerminal()" class="btn btn-sm btn-danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                    <h3 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"></polyline>
+                            <line x1="12" y1="19" x2="20" y2="19"></line>
+                        </svg>
+                        Server Console
+                    </h3>
+                    <button onclick="clearTerminal()" class="btn btn-sm btn-outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                         </svg>
                         Clear
                     </button>
                 </div>
-                <div class="card-body">
-                    <div id="terminal" class="terminal-container p-4 mb-4"></div>
+                <div class="card-body p-0">
+                    <div id="terminal" class="terminal-container"></div>
                     
-                    <div class="flex items-center gap-3">
-                        <div class="relative flex-grow">
-                            <input type="text" 
-                                   id="console-input" 
-                                   class="form-input" 
-                                   placeholder="Enter command..." 
-                                   required>
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                                <span class="text-xs">ENTER</span>
-                            </div>
-                        </div>
-                    
-                        <button onclick="sendCommand()" 
-                                class="btn btn-primary flex items-center gap-2">
+                    <div class="console-input-container p-4 border-t border-slate-700">
+                        <input type="text" 
+                               id="console-input" 
+                               class="console-input" 
+                               placeholder="Enter command..." 
+                               required>
+                        <button onclick="sendCommand()" class="btn btn-primary">
                             <span>Send</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -534,12 +535,19 @@
             <!-- Server Control Card -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"><%= instance.Name %></h3>
+                    <h3 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <%= instance.Name %>
+                    </h3>
                     <span id="status" class="status-badge status-offline">OFFLINE</span>
                 </div>
                 <div class="card-body">
                     <!-- Power Controls -->
-                    <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="power-controls">
                         <button id="startButton" class="power-btn" title="Start Server">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -585,7 +593,6 @@
                                 <span id="node"><%= instance.Node.name %></span>
                             </div>
                             
-                            <div class="server-detail">
                             <div class="server-detail">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="server-detail-icon">
                                     <circle cx="12" cy="12" r="10"></circle>
@@ -661,26 +668,28 @@
 
 <!-- Terminal and WebSocket Scripts -->
 <script>
+    // Your existing JavaScript functionality remains unchanged
+    // Only the UI/theme has been updated
     const baseTheme = {
-        foreground: '#d8dee9',
+        foreground: '#f8fafc',
         background: 'rgba(0, 0, 0, 0)',
-        selection: 'rgba(93, 165, 213, 0.2)',
-        black: '#1E1E1D',
-        brightBlack: '#262625',
-        red: '#E54B4B',
-        green: '#9ECE58',
-        yellow: '#FAED70',
-        blue: '#396FE2',
-        magenta: '#BB80B3',
-        cyan: '#2DDAFD',
-        white: '#d0d0d0',
-        brightBlack: 'rgba(255, 255, 255, 0.2)',
-        brightRed: '#FF5370',
-        brightGreen: '#C3E88D',
-        brightYellow: '#FFCB6B',
-        brightBlue: '#82AAFF',
-        brightMagenta: '#C792EA',
-        brightCyan: '#89DDFF',
+        selection: 'rgba(99, 102, 241, 0.3)',
+        black: '#1E293B',
+        brightBlack: '#334155',
+        red: '#ef4444',
+        green: '#10b981',
+        yellow: '#f59e0b',
+        blue: '#3b82f6',
+        magenta: '#8b5cf6',
+        cyan: '#06b6d4',
+        white: '#f8fafc',
+        brightBlack: '#64748b',
+        brightRed: '#f87171',
+        brightGreen: '#34d399',
+        brightYellow: '#fbbf24',
+        brightBlue: '#60a5fa',
+        brightMagenta: '#a78bfa',
+        brightCyan: '#22d3ee',
         brightWhite: '#ffffff',
     };
     
@@ -767,11 +776,11 @@
             cursorStyle: 'underline',
             rows: 20,
             cols: 100,
-            fontFamily: 'Menlo, monospace',
+            fontFamily: 'Fira Code, Menlo, monospace',
             theme: baseTheme,
             allowTransparency: true,
-            fontSize: 12,
-            lineHeight: 1.0,
+            fontSize: 13,
+            lineHeight: 1.2,
         });
 
         const terminalContainer = document.getElementById('terminal');
