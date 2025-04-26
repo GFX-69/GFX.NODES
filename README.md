@@ -40,11 +40,9 @@ apt-get install nodejs -y
 To install and start the Gfx Nodes , run the following commands:
 
 ```bash
-git clone https://github.com/GFX-69/GFX.NODES.git && cd panel-v1.0.0 && npm install && npm run seed && npm run createUser && node .
+git clone https://github.com/GFX-69/GFX.NODES.git && cd GFX.NODES && npm install && npm run seed && npm run createUser && node .
 ```
 
 ## Credits  
 - **Developed by**: Akash Evan
 - **made by**: Akashevan
-- **Powered by**: WEBLAB  
-- **Special Thanks**: SRYDEN
